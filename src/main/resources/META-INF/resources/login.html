@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>VizLyst - Masuk Akun</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #d9d9d9;
+			--panel: rgba(246, 246, 246, 0.92);
+			--ink: #161616;
+			--line: #1f1f1f;
+			--soft-line: #cfcfcf;
+			--input-bg: #fefefe;
+			--link: #111111;
+			--focus: #165aa6;
+			--success: #0f7a4e;
+			--error: #b31f1f;
+			--shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			margin: 0;
+			min-height: 100%;
+		}
+
+		body {
+			font-family: "Manrope", "Segoe UI", Tahoma, sans-serif;
+			color: var(--ink);
+			background:
+				radial-gradient(circle at 14% 12%, rgba(255, 255, 255, 0.72), transparent 40%),
+				radial-gradient(circle at 92% 88%, rgba(0, 0, 0, 0.08), transparent 34%),
+				linear-gradient(160deg, #dedede, var(--bg));
+			display: grid;
+			place-items: center;
+			padding: 22px;
+		}
+
+		.login-shell {
+			width: min(100%, 640px);
+			background: var(--panel);
+			border: 1.5px solid rgba(0, 0, 0, 0.12);
+			border-radius: 16px;
+			box-shadow: var(--shadow);
+			padding: clamp(20px, 3vw, 30px);
+			backdrop-filter: blur(2px);
+			animation: rise .55s ease-out both;
+		}
+
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin-bottom: 16px;
+		}
+
+		.brand-mark {
+			width: 34px;
+			height: 34px;
+			border-radius: 7px;
+			background: #0b0b0b;
+			color: #ffffff;
+			display: grid;
+			place-items: center;
+			font-family: "Space Grotesk", "Manrope", sans-serif;
+			font-size: 15px;
+			font-weight: 700;
+			letter-spacing: -0.3px;
+		}
+
+		.brand-name {
+			margin: 0;
+			font-family: "Space Grotesk", "Manrope", sans-serif;
+			font-style: italic;
+			font-size: clamp(1.2rem, 2.3vw, 1.5rem);
+			font-weight: 700;
+		}
+
+		.title {
+			margin: 10px 0 22px;
+			text-align: center;
+			font-size: clamp(1.35rem, 2.8vw, 2rem);
+			line-height: 1.2;
+		}
+
+		.form {
+			display: grid;
+			gap: 14px;
+		}
+
+		.field {
+			animation: rise .5s ease-out both;
+		}
+
+		.field:nth-of-type(1) {
+			animation-delay: .06s;
+		}
+
+		.field:nth-of-type(2) {
+			animation-delay: .12s;
+		}
+
+		.field-label {
+			display: block;
+			margin-bottom: 9px;
+			font-size: 1.12rem;
+			font-weight: 600;
+		}
+
+		.field-row {
+			display: grid;
+			grid-template-columns: 46px 1fr;
+			gap: 12px;
+			align-items: center;
+		}
+
+		.field-icon {
+			width: 46px;
+			height: 46px;
+			display: grid;
+			place-items: center;
+		}
+
+		.field-icon svg {
+			width: 36px;
+			height: 36px;
+			fill: #000000;
+		}
+
+		.input-wrap {
+			position: relative;
+		}
+
+		.text-input {
+			width: 100%;
+			height: 52px;
+			border: 2px solid var(--line);
+			border-radius: 10px;
+			background: var(--input-bg);
+			font: inherit;
+			font-size: 1rem;
+			color: var(--ink);
+			padding: 0 14px;
+			transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
+		}
+
+		.text-input.password {
+			padding-right: 80px;
+		}
+
+		.text-input::placeholder {
+			color: #7c7c7c;
+		}
+
+		.text-input:focus {
+			border-color: var(--focus);
+			box-shadow: 0 0 0 3px rgba(22, 90, 166, 0.22);
+			outline: none;
+			background: #ffffff;
+		}
+
+		.input-wrap.invalid .text-input {
+			border-color: var(--error);
+		}
+
+		.toggle-pass {
+			position: absolute;
+			top: 50%;
+			right: 10px;
+			transform: translateY(-50%);
+			border: 0;
+			background: transparent;
+			font: inherit;
+			font-size: 0.82rem;
+			font-weight: 800;
+			color: #2e2e2e;
+			cursor: pointer;
+			padding: 5px 6px;
+			border-radius: 8px;
+		}
+
+		.field-help {
+			margin: 7px 0 0 58px;
+			min-height: 17px;
+			font-size: 0.84rem;
+			color: var(--error);
+		}
+
+		.options {
+			margin-top: 2px;
+			margin-left: 58px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 10px;
+		}
+
+		.remember {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			cursor: pointer;
+			font-size: 1.05rem;
+		}
+
+		.remember input {
+			appearance: none;
+			width: 22px;
+			height: 22px;
+			border: 2px solid #d2d2d2;
+			border-radius: 3px;
+			background: #ececec;
+			margin: 0;
+			display: grid;
+			place-items: center;
+			transition: all .16s ease;
+		}
+
+		.remember input::after {
+			content: "";
+			width: 10px;
+			height: 10px;
+			border-radius: 2px;
+			background: #131313;
+			transform: scale(0);
+			transition: transform .16s ease;
+		}
+
+		.remember input:checked {
+			border-color: #353535;
+			background: #fafafa;
+		}
+
+		.remember input:checked::after {
+			transform: scale(1);
+		}
+
+		.forgot,
+		.signup a {
+			color: var(--link);
+			font-style: italic;
+			font-weight: 800;
+			text-decoration-thickness: 1.4px;
+			text-underline-offset: 4px;
+		}
+
+		.action {
+			margin-top: 2px;
+			margin-left: 58px;
+			width: min(100%, 320px);
+		}
+
+		.submit {
+			width: 100%;
+			height: 50px;
+			border: 2px solid var(--line);
+			border-radius: 10px;
+			background: linear-gradient(180deg, #f1f1f1, #d8d8d8);
+			color: #121212;
+			font-family: "Space Grotesk", "Manrope", sans-serif;
+			font-style: italic;
+			font-size: 1.9rem;
+			font-weight: 700;
+			letter-spacing: -0.4px;
+			cursor: pointer;
+			transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+		}
+
+		.submit:hover:not(:disabled) {
+			transform: translateY(-1px);
+			box-shadow: 0 8px 14px rgba(0, 0, 0, 0.12);
+			filter: brightness(1.02);
+		}
+
+		.submit:disabled {
+			opacity: 0.72;
+			cursor: not-allowed;
+		}
+
+		.submit.loading {
+			position: relative;
+			color: transparent;
+		}
+
+		.submit.loading::before {
+			content: "";
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			width: 19px;
+			height: 19px;
+			margin-left: -9px;
+			margin-top: -9px;
+			border-radius: 999px;
+			border: 2px solid rgba(0, 0, 0, 0.2);
+			border-top-color: #121212;
+			animation: spin .7s linear infinite;
+		}
+
+		.status {
+			margin: 9px 0 0 58px;
+			min-height: 18px;
+			font-size: 0.9rem;
+			font-weight: 600;
+			color: #3f3f3f;
+		}
+
+		.status.success {
+			color: var(--success);
+		}
+
+		.status.error {
+			color: var(--error);
+		}
+
+		.status.info {
+			color: #2f2f2f;
+		}
+
+		.signup {
+			margin: 16px 0 0;
+			text-align: center;
+			font-size: 1.15rem;
+		}
+
+		.toggle-pass:focus-visible,
+		.submit:focus-visible,
+		.forgot:focus-visible,
+		.signup a:focus-visible,
+		.remember input:focus-visible,
+		.text-input:focus-visible {
+			outline: 3px solid rgba(22, 90, 166, 0.26);
+			outline-offset: 2px;
+		}
+
+		@keyframes rise {
+			from {
+				opacity: 0;
+				transform: translateY(12px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes spin {
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		@media (max-width: 620px) {
+			.login-shell {
+				padding: 18px;
+				border-radius: 14px;
+			}
+
+			.title {
+				margin-top: 4px;
+				margin-bottom: 18px;
+			}
+
+			.field-label {
+				font-size: 1.04rem;
+			}
+
+			.field-row {
+				grid-template-columns: 40px 1fr;
+				gap: 9px;
+			}
+
+			.field-icon {
+				width: 40px;
+				height: 40px;
+			}
+
+			.field-icon svg {
+				width: 31px;
+				height: 31px;
+			}
+
+			.field-help,
+			.options,
+			.action,
+			.status {
+				margin-left: 49px;
+			}
+
+			.submit {
+				font-size: 1.66rem;
+			}
+
+			.signup {
+				font-size: 1.05rem;
+			}
+		}
+
+		@media (max-width: 430px) {
+			body {
+				padding: 14px;
+			}
+
+			.title {
+				font-size: 1.24rem;
+			}
+
+			.text-input {
+				height: 48px;
+			}
+
+			.options {
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 8px;
+			}
+
+			.action {
+				width: 100%;
+			}
+
+			.submit {
+				height: 48px;
+				font-size: 1.5rem;
+			}
+
+			.signup {
+				text-align: left;
+				margin-left: 49px;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			*,
+			*::before,
+			*::after {
+				animation-duration: 0.01ms !important;
+				animation-iteration-count: 1 !important;
+				transition-duration: 0.01ms !important;
+				scroll-behavior: auto !important;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="login-shell" aria-labelledby="title-login">
+		<header class="brand">
+			<div class="brand-mark" aria-hidden="true">VL</div>
+			<p class="brand-name">VizLyst</p>
+		</header>
+
+		<h1 class="title" id="title-login">Silahkan masukkan Akun Anda</h1>
+
+		<form class="form" id="loginForm" novalidate>
+			<div class="field">
+				<label class="field-label" for="username">Nama Akun :</label>
+				<div class="field-row">
+					<div class="field-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" focusable="false">
+							<path d="M12 12.2a5.2 5.2 0 1 0 0-10.4 5.2 5.2 0 0 0 0 10.4Zm0 2.2c-4.6 0-8.4 2.9-8.4 6.6 0 .7.5 1.2 1.2 1.2h14.4c.7 0 1.2-.5 1.2-1.2 0-3.7-3.8-6.6-8.4-6.6Z" />
+						</svg>
+					</div>
+					<div class="input-wrap" id="usernameWrap">
+						<input
+							class="text-input"
+							type="text"
+							id="username"
+							name="username"
+							autocomplete="username"
+							placeholder="Masukkan nama akun"
+							aria-describedby="usernameHelp"
+							required
+						>
+					</div>
+				</div>
+				<p class="field-help" id="usernameHelp" aria-live="polite"></p>
+			</div>
+
+			<div class="field">
+				<label class="field-label" for="password">Sandi Akun :</label>
+				<div class="field-row">
+					<div class="field-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" focusable="false">
+							<path d="M12 1.8a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8.2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V11.8a2 2 0 0 0-2-2h-1V6.8a5 5 0 0 0-5-5Zm-3 8V6.8a3 3 0 0 1 6 0v3H9Zm3 3.2a2 2 0 0 0-1 3.8v2a1 1 0 0 0 2 0v-2a2 2 0 0 0-1-3.8Z" />
+						</svg>
+					</div>
+					<div class="input-wrap" id="passwordWrap">
+						<input
+							class="text-input password"
+							type="password"
+							id="password"
+							name="password"
+							autocomplete="current-password"
+							placeholder="Masukkan sandi"
+							aria-describedby="passwordHelp"
+							required
+						>
+						<button class="toggle-pass" type="button" id="togglePassword" aria-label="Tampilkan sandi">Lihat</button>
+					</div>
+				</div>
+				<p class="field-help" id="passwordHelp" aria-live="polite"></p>
+			</div>
+
+			<div class="options">
+				<label class="remember" for="remember">
+					<input type="checkbox" id="remember" name="remember">
+					Sudah Benar
+				</label>
+				<a href="#" class="forgot" id="forgotLink">Sandi Lupa?</a>
+			</div>
+
+			<div class="action">
+				<button class="submit" type="submit" id="submitBtn">Masuk Akun</button>
+			</div>
+
+			<p class="status" id="status" aria-live="polite"></p>
+		</form>
+
+		<p class="signup">Belum Punya Akun? <a href="#" id="signupLink">Daftar Dulu</a></p>
+	</main>
+
+	<script>
+		const AUTH_SESSION_KEY = "vizlyst.auth.session";
+		const AUTH_USERS_KEY = "vizlyst.auth.users";
+		const NEXT_PAGE_PARAM = new URLSearchParams(window.location.search).get("next");
+
+		const form = document.getElementById("loginForm");
+		const usernameInput = document.getElementById("username");
+		const passwordInput = document.getElementById("password");
+		const rememberInput = document.getElementById("remember");
+		const usernameWrap = document.getElementById("usernameWrap");
+		const passwordWrap = document.getElementById("passwordWrap");
+		const usernameHelp = document.getElementById("usernameHelp");
+		const passwordHelp = document.getElementById("passwordHelp");
+		const status = document.getElementById("status");
+		const submitBtn = document.getElementById("submitBtn");
+		const togglePasswordBtn = document.getElementById("togglePassword");
+		const forgotLink = document.getElementById("forgotLink");
+		const signupLink = document.getElementById("signupLink");
+
+		function resolveNextPage() {
+			const allowedPages = ["beranda.html", "catat.html", "prediksi.html"];
+			return allowedPages.includes(NEXT_PAGE_PARAM) ? NEXT_PAGE_PARAM : "beranda.html";
+		}
+
+		function readAuthSession() {
+			const parseSession = (raw) => {
+				if (!raw) {
+					return null;
+				}
+
+				try {
+					const parsed = JSON.parse(raw);
+					if (parsed && typeof parsed.username === "string" && parsed.username.trim()) {
+						return parsed;
+					}
+					return null;
+				} catch (error) {
+					return null;
+				}
+			};
+
+			const sessionData = parseSession(sessionStorage.getItem(AUTH_SESSION_KEY));
+			if (sessionData) {
+				return sessionData;
+			}
+
+			const persistentData = parseSession(localStorage.getItem(AUTH_SESSION_KEY));
+			if (persistentData) {
+				sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(persistentData));
+				return persistentData;
+			}
+
+			return null;
+		}
+
+		function readRegisteredUsers() {
+			const raw = localStorage.getItem(AUTH_USERS_KEY);
+			if (!raw) {
+				return [];
+			}
+
+			try {
+				const users = JSON.parse(raw);
+				return Array.isArray(users) ? users : [];
+			} catch (error) {
+				return [];
+			}
+		}
+
+		const existingSession = readAuthSession();
+		if (existingSession) {
+			window.location.replace(resolveNextPage());
+		}
+
+		const savedUsername = localStorage.getItem("vizlyst.remember.username");
+		const prefilledFromRegister = localStorage.getItem("vizlyst.prefill.username");
+		if (savedUsername) {
+			usernameInput.value = savedUsername;
+			rememberInput.checked = true;
+		} else if (prefilledFromRegister) {
+			usernameInput.value = prefilledFromRegister;
+		}
+		if (prefilledFromRegister) {
+			localStorage.removeItem("vizlyst.prefill.username");
+		}
+
+		function setFieldError(wrapEl, helpEl, inputEl, message) {
+			wrapEl.classList.add("invalid");
+			helpEl.textContent = message;
+			inputEl.setAttribute("aria-invalid", "true");
+		}
+
+		function clearFieldError(wrapEl, helpEl, inputEl) {
+			wrapEl.classList.remove("invalid");
+			helpEl.textContent = "";
+			inputEl.removeAttribute("aria-invalid");
+		}
+
+		function setStatus(message, type) {
+			status.textContent = message;
+			status.className = "status";
+			if (type) {
+				status.classList.add(type);
+			}
+		}
+
+		function validateForm() {
+			let isValid = true;
+
+			clearFieldError(usernameWrap, usernameHelp, usernameInput);
+			clearFieldError(passwordWrap, passwordHelp, passwordInput);
+			setStatus("");
+
+			if (usernameInput.value.trim().length < 3) {
+				setFieldError(usernameWrap, usernameHelp, usernameInput, "Nama akun minimal 3 karakter.");
+				isValid = false;
+			}
+
+			if (passwordInput.value.length < 6) {
+				setFieldError(passwordWrap, passwordHelp, passwordInput, "Sandi minimal 6 karakter.");
+				isValid = false;
+			}
+
+			return isValid;
+		}
+
+		togglePasswordBtn.addEventListener("click", () => {
+			const isMasked = passwordInput.type === "password";
+			passwordInput.type = isMasked ? "text" : "password";
+			togglePasswordBtn.textContent = isMasked ? "Sembunyi" : "Lihat";
+			togglePasswordBtn.setAttribute("aria-label", isMasked ? "Sembunyikan sandi" : "Tampilkan sandi");
+		});
+
+		usernameInput.addEventListener("input", () => {
+			if (usernameInput.value.trim().length >= 3) {
+				clearFieldError(usernameWrap, usernameHelp, usernameInput);
+			}
+		});
+
+		passwordInput.addEventListener("input", () => {
+			if (passwordInput.value.length >= 6) {
+				clearFieldError(passwordWrap, passwordHelp, passwordInput);
+			}
+		});
+
+		forgotLink.addEventListener("click", (event) => {
+			event.preventDefault();
+			setStatus("Fitur reset sandi masih tahap prototype.", "info");
+		});
+
+		signupLink.addEventListener("click", (event) => {
+			event.preventDefault();
+			window.location.href = "register.html?next=" + encodeURIComponent(resolveNextPage());
+		});
+
+		form.addEventListener("submit", (event) => {
+			event.preventDefault();
+
+			if (!validateForm()) {
+				setStatus("Periksa kembali data login Anda.", "error");
+				return;
+			}
+
+			if (rememberInput.checked) {
+				localStorage.setItem("vizlyst.remember.username", usernameInput.value.trim());
+			} else {
+				localStorage.removeItem("vizlyst.remember.username");
+			}
+
+			const users = readRegisteredUsers();
+			if (!users.length) {
+				setStatus("Akun belum terdaftar. Silakan daftar dulu.", "error");
+				return;
+			}
+
+			const username = usernameInput.value.trim();
+			const matchedUser = users.find((user) => user && user.username === username);
+			if (!matchedUser || matchedUser.password !== passwordInput.value) {
+				setStatus("Nama akun atau sandi tidak sesuai.", "error");
+				return;
+			}
+
+			const activeSession = {
+				username: matchedUser.username,
+				fullName: matchedUser.fullName || matchedUser.username,
+				loginAt: new Date().toISOString()
+			};
+			sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(activeSession));
+			if (rememberInput.checked) {
+				localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(activeSession));
+			} else {
+				localStorage.removeItem(AUTH_SESSION_KEY);
+			}
+
+			submitBtn.disabled = true;
+			submitBtn.classList.add("loading");
+			setStatus("Memproses login...", "info");
+
+			setTimeout(() => {
+				setStatus("Berhasil masuk. Mengarahkan ke beranda...", "success");
+				submitBtn.classList.remove("loading");
+				submitBtn.disabled = false;
+				window.location.href = resolveNextPage();
+			}, 1100);
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>VizLyst - Daftar Akun</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #d9d9d9;
+			--panel: rgba(246, 246, 246, 0.92);
+			--ink: #161616;
+			--line: #1f1f1f;
+			--input-bg: #fefefe;
+			--focus: #165aa6;
+			--success: #0f7a4e;
+			--error: #b31f1f;
+			--shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			margin: 0;
+			min-height: 100%;
+		}
+
+		body {
+			font-family: "Manrope", "Segoe UI", Tahoma, sans-serif;
+			color: var(--ink);
+			background:
+				radial-gradient(circle at 14% 12%, rgba(255, 255, 255, 0.72), transparent 40%),
+				radial-gradient(circle at 92% 88%, rgba(0, 0, 0, 0.08), transparent 34%),
+				linear-gradient(160deg, #dedede, var(--bg));
+			display: grid;
+			place-items: center;
+			padding: 22px;
+		}
+
+		.register-shell {
+			width: min(100%, 780px);
+			background: var(--panel);
+			border: 1.5px solid rgba(0, 0, 0, 0.12);
+			border-radius: 16px;
+			box-shadow: var(--shadow);
+			padding: clamp(20px, 3vw, 30px);
+			backdrop-filter: blur(2px);
+			animation: rise .55s ease-out both;
+		}
+
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin-bottom: 16px;
+		}
+
+		.brand-mark {
+			width: 34px;
+			height: 34px;
+			border-radius: 7px;
+			background: #0b0b0b;
+			color: #ffffff;
+			display: grid;
+			place-items: center;
+			font-family: "Space Grotesk", "Manrope", sans-serif;
+			font-size: 15px;
+			font-weight: 700;
+			letter-spacing: -0.3px;
+		}
+
+		.brand-name {
+			margin: 0;
+			font-family: "Space Grotesk", "Manrope", sans-serif;
+			font-style: italic;
+			font-size: clamp(1.2rem, 2.3vw, 1.5rem);
+			font-weight: 700;
+		}
+
+		.title {
+			margin: 10px 0 24px;
+			text-align: center;
+			font-size: clamp(1.35rem, 2.8vw, 2rem);
+			line-height: 1.2;
+		}
+
+		.form {
+			display: grid;
+			gap: 14px;
+		}
+
+		.field {
+			display: grid;
+			grid-template-columns: minmax(160px, 240px) 1fr;
+			column-gap: 16px;
+			row-gap: 8px;
+			align-items: center;
+			opacity: 0;
+			animation: rise .5s ease-out forwards;
+		}
+
+		.field:nth-of-type(1) {
+			animation-delay: .06s;
+		}
+
+		.field:nth-of-type(2) {
+			animation-delay: .12s;
+		}
+
+		.field:nth-of-type(3) {
+			animation-delay: .18s;
+		}
+
+		.field-label {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			font-size: clamp(1.06rem, 2.2vw, 1.55rem);
+			font-weight: 700;
+			line-height: 1;
+		}
+
+		.field-icon {
+			width: 42px;
+			height: 42px;
+			display: grid;
+			place-items: center;
+			flex-shrink: 0;
+		}
+
+		.field-icon svg {
+			width: 35px;
+			height: 35px;
+			fill: #000000;
+		}
+
+		.input-wrap {
+			grid-column: 2;
+			position: relative;
+		}
+
+		.text-input {
+			width: 100%;
+			height: 56px;
+			border: 2px solid var(--line);
+			border-radius: 10px;
+			background: var(--input-bg);
+			font: inherit;
+			font-size: 1.02rem;
+			color: var(--ink);
+			padding: 0 14px;
+			transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
+		}
+
+		.text-input.password {
+			padding-right: 88px;
+		}
+
+		.text-input::placeholder {
+			color: #7c7c7c;
+		}
+
+		.text-input:focus {
+			border-color: var(--focus);
+			box-shadow: 0 0 0 3px rgba(22, 90, 166, 0.22);
+			outline: none;
+			background: #ffffff;
+		}
+
+		.input-wrap.invalid .text-input {
+			border-color: var(--error);
+		}
+
+		.toggle-pass {
+			position: absolute;
+			top: 50%;
+			right: 10px;
+			transform: translateY(-50%);
+			border: 0;
+			background: transparent;
+			font: inherit;
+			font-size: 0.82rem;
+			font-weight: 800;
+			color: #2e2e2e;
+			cursor: pointer;
+			padding: 5px 6px;
+			border-radius: 8px;
+		}
+
+		.field-help {
+			grid-column: 2;
+			margin: 0;
+			min-height: 17px;
+			font-size: 0.84rem;
+			color: var(--error);
+		}
+
+		.form-footer {
+			margin-top: 6px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+		}
+
+		.submit {
+			width: clamp(170px, 42%, 250px);
+			height: 52px;
+			border: 2px solid var(--line);
+			border-radius: 10px;
+			background: linear-gradient(180deg, #f1f1f1, #d8d8d8);
+			color: #121212;
+			font-family: "Space Grotesk", "Manrope", sans-serif;
+			font-style: italic;
+			font-size: clamp(1.45rem, 3.4vw, 2rem);
+			font-weight: 700;
+			letter-spacing: -0.4px;
+			cursor: pointer;
+			transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+		}
+
+		.submit:hover:not(:disabled) {
+			transform: translateY(-1px);
+			box-shadow: 0 8px 14px rgba(0, 0, 0, 0.12);
+			filter: brightness(1.02);
+		}
+
+		.submit:disabled {
+			opacity: 0.72;
+			cursor: not-allowed;
+		}
+
+		.submit.loading {
+			position: relative;
+			color: transparent;
+		}
+
+		.submit.loading::before {
+			content: "";
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			width: 19px;
+			height: 19px;
+			margin-left: -9px;
+			margin-top: -9px;
+			border-radius: 999px;
+			border: 2px solid rgba(0, 0, 0, 0.2);
+			border-top-color: #121212;
+			animation: spin .7s linear infinite;
+		}
+
+		.agree {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			cursor: pointer;
+			font-size: 1.05rem;
+			margin-left: auto;
+		}
+
+		.agree input {
+			appearance: none;
+			width: 25px;
+			height: 25px;
+			border: 2px solid #d2d2d2;
+			border-radius: 3px;
+			background: #ececec;
+			margin: 0;
+			display: grid;
+			place-items: center;
+			transition: all .16s ease;
+		}
+
+		.agree input::after {
+			content: "";
+			width: 11px;
+			height: 11px;
+			border-radius: 2px;
+			background: #131313;
+			transform: scale(0);
+			transition: transform .16s ease;
+		}
+
+		.agree input:checked {
+			border-color: #353535;
+			background: #fafafa;
+		}
+
+		.agree input:checked::after {
+			transform: scale(1);
+		}
+
+		.status {
+			margin: 3px 0 0;
+			min-height: 18px;
+			font-size: 0.9rem;
+			font-weight: 600;
+			color: #3f3f3f;
+		}
+
+		.status.success {
+			color: var(--success);
+		}
+
+		.status.error {
+			color: var(--error);
+		}
+
+		.status.info {
+			color: #2f2f2f;
+		}
+
+		.signin {
+			margin: 14px 0 0;
+			text-align: right;
+			font-size: 0.96rem;
+		}
+
+		.signin a {
+			color: #111111;
+			font-style: italic;
+			font-weight: 800;
+			text-decoration-thickness: 1.4px;
+			text-underline-offset: 3px;
+		}
+
+		.toggle-pass:focus-visible,
+		.submit:focus-visible,
+		.signin a:focus-visible,
+		.agree input:focus-visible,
+		.text-input:focus-visible {
+			outline: 3px solid rgba(22, 90, 166, 0.26);
+			outline-offset: 2px;
+		}
+
+		@keyframes rise {
+			from {
+				opacity: 0;
+				transform: translateY(12px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes spin {
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		@media (max-width: 760px) {
+			.register-shell {
+				padding: 18px;
+				border-radius: 14px;
+			}
+
+			.title {
+				margin-top: 4px;
+				margin-bottom: 18px;
+			}
+
+			.field {
+				grid-template-columns: 1fr;
+				row-gap: 7px;
+			}
+
+			.field-label,
+			.input-wrap,
+			.field-help {
+				grid-column: 1;
+			}
+
+			.field-label {
+				font-size: 1.07rem;
+			}
+
+			.field-icon {
+				width: 38px;
+				height: 38px;
+			}
+
+			.field-icon svg {
+				width: 31px;
+				height: 31px;
+			}
+
+			.text-input {
+				height: 52px;
+			}
+
+			.form-footer {
+				flex-direction: column-reverse;
+				align-items: stretch;
+				gap: 10px;
+			}
+
+			.submit {
+				width: 100%;
+				height: 50px;
+				font-size: 1.58rem;
+			}
+
+			.agree {
+				margin-left: 0;
+				align-self: flex-start;
+			}
+
+			.signin {
+				text-align: left;
+			}
+		}
+
+		@media (max-width: 430px) {
+			body {
+				padding: 14px;
+			}
+
+			.title {
+				font-size: 1.24rem;
+			}
+
+			.text-input {
+				height: 48px;
+				font-size: 0.98rem;
+			}
+
+			.submit {
+				height: 48px;
+				font-size: 1.45rem;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			*,
+			*::before,
+			*::after {
+				animation-duration: 0.01ms !important;
+				animation-iteration-count: 1 !important;
+				transition-duration: 0.01ms !important;
+				scroll-behavior: auto !important;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="register-shell" aria-labelledby="title-register">
+		<header class="brand">
+			<div class="brand-mark" aria-hidden="true">VL</div>
+			<p class="brand-name">VizLyst</p>
+		</header>
+
+		<h1 class="title" id="title-register">Buat Akun Terlebih Dahulu</h1>
+
+		<form class="form" id="registerForm" novalidate>
+			<div class="field">
+				<label class="field-label" for="fullName">
+					<span class="field-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" focusable="false">
+							<path d="M12 12.2a5.2 5.2 0 1 0 0-10.4 5.2 5.2 0 0 0 0 10.4Zm0 2.2c-4.6 0-8.4 2.9-8.4 6.6 0 .7.5 1.2 1.2 1.2h14.4c.7 0 1.2-.5 1.2-1.2 0-3.7-3.8-6.6-8.4-6.6Z" />
+						</svg>
+					</span>
+					Nama Panjang
+				</label>
+				<div class="input-wrap" id="fullNameWrap">
+					<input
+						class="text-input"
+						type="text"
+						id="fullName"
+						name="fullName"
+						autocomplete="name"
+						placeholder="Masukkan nama lengkap"
+						aria-describedby="fullNameHelp"
+						required
+					>
+				</div>
+				<p class="field-help" id="fullNameHelp" aria-live="polite"></p>
+			</div>
+
+			<div class="field">
+				<label class="field-label" for="username">
+					<span class="field-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" focusable="false">
+							<path d="M12 12.2a5.2 5.2 0 1 0 0-10.4 5.2 5.2 0 0 0 0 10.4Zm0 2.2c-4.6 0-8.4 2.9-8.4 6.6 0 .7.5 1.2 1.2 1.2h14.4c.7 0 1.2-.5 1.2-1.2 0-3.7-3.8-6.6-8.4-6.6Z" />
+						</svg>
+					</span>
+					Nama Akun
+				</label>
+				<div class="input-wrap" id="usernameWrap">
+					<input
+						class="text-input"
+						type="text"
+						id="username"
+						name="username"
+						autocomplete="username"
+						placeholder="Masukkan nama akun"
+						aria-describedby="usernameHelp"
+						required
+					>
+				</div>
+				<p class="field-help" id="usernameHelp" aria-live="polite"></p>
+			</div>
+
+			<div class="field">
+				<label class="field-label" for="password">
+					<span class="field-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" focusable="false">
+							<path d="M12 1.8a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8.2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V11.8a2 2 0 0 0-2-2h-1V6.8a5 5 0 0 0-5-5Zm-3 8V6.8a3 3 0 0 1 6 0v3H9Zm3 3.2a2 2 0 0 0-1 3.8v2a1 1 0 0 0 2 0v-2a2 2 0 0 0-1-3.8Z" />
+						</svg>
+					</span>
+					Sandi Akun
+				</label>
+				<div class="input-wrap" id="passwordWrap">
+					<input
+						class="text-input password"
+						type="password"
+						id="password"
+						name="password"
+						autocomplete="new-password"
+						placeholder="Buat sandi akun"
+						aria-describedby="passwordHelp"
+						required
+					>
+					<button class="toggle-pass" type="button" id="togglePassword" aria-label="Tampilkan sandi">Lihat</button>
+				</div>
+				<p class="field-help" id="passwordHelp" aria-live="polite"></p>
+			</div>
+
+			<div class="form-footer">
+				<button class="submit" type="submit" id="submitBtn">Selesai</button>
+
+				<label class="agree" for="agree">
+					<input type="checkbox" id="agree" name="agree">
+					Sudah Benar
+				</label>
+			</div>
+
+			<p class="status" id="status" aria-live="polite"></p>
+		</form>
+
+		<p class="signin">Sudah punya akun? <a href="login.html" id="signinLink">Masuk Akun</a></p>
+	</main>
+
+	<script>
+		const AUTH_USERS_KEY = "vizlyst.auth.users";
+		const NEXT_PAGE_PARAM = new URLSearchParams(window.location.search).get("next");
+
+		const form = document.getElementById("registerForm");
+		const fullNameInput = document.getElementById("fullName");
+		const usernameInput = document.getElementById("username");
+		const passwordInput = document.getElementById("password");
+		const agreeInput = document.getElementById("agree");
+		const fullNameWrap = document.getElementById("fullNameWrap");
+		const usernameWrap = document.getElementById("usernameWrap");
+		const passwordWrap = document.getElementById("passwordWrap");
+		const fullNameHelp = document.getElementById("fullNameHelp");
+		const usernameHelp = document.getElementById("usernameHelp");
+		const passwordHelp = document.getElementById("passwordHelp");
+		const togglePasswordBtn = document.getElementById("togglePassword");
+		const submitBtn = document.getElementById("submitBtn");
+		const status = document.getElementById("status");
+		const signinLink = document.getElementById("signinLink");
+
+		function resolveNextPage() {
+			const allowedPages = ["beranda.html", "catat.html", "prediksi.html"];
+			return allowedPages.includes(NEXT_PAGE_PARAM) ? NEXT_PAGE_PARAM : "beranda.html";
+		}
+
+		function getLoginLink() {
+			return "login.html?next=" + encodeURIComponent(resolveNextPage());
+		}
+
+		signinLink.setAttribute("href", getLoginLink());
+
+		function readRegisteredUsers() {
+			const raw = localStorage.getItem(AUTH_USERS_KEY);
+			if (!raw) {
+				return [];
+			}
+
+			try {
+				const users = JSON.parse(raw);
+				return Array.isArray(users) ? users : [];
+			} catch (error) {
+				return [];
+			}
+		}
+
+		function setFieldError(wrapEl, helpEl, inputEl, message) {
+			wrapEl.classList.add("invalid");
+			helpEl.textContent = message;
+			inputEl.setAttribute("aria-invalid", "true");
+		}
+
+		function clearFieldError(wrapEl, helpEl, inputEl) {
+			wrapEl.classList.remove("invalid");
+			helpEl.textContent = "";
+			inputEl.removeAttribute("aria-invalid");
+		}
+
+		function setStatus(message, type) {
+			status.textContent = message;
+			status.className = "status";
+			if (type) {
+				status.classList.add(type);
+			}
+		}
+
+		function validateFullName() {
+			const value = fullNameInput.value.trim();
+			const hasTwoWords = value.split(/\s+/).filter(Boolean).length >= 2;
+			if (value.length < 4 || !hasTwoWords) {
+				setFieldError(fullNameWrap, fullNameHelp, fullNameInput, "Isi nama panjang minimal 2 kata.");
+				return false;
+			}
+			clearFieldError(fullNameWrap, fullNameHelp, fullNameInput);
+			return true;
+		}
+
+		function validateUsername() {
+			const value = usernameInput.value.trim();
+			const validPattern = /^[a-zA-Z0-9._]{3,}$/;
+			if (!validPattern.test(value)) {
+				setFieldError(
+					usernameWrap,
+					usernameHelp,
+					usernameInput,
+					"Nama akun minimal 3 karakter dan tanpa spasi."
+				);
+				return false;
+			}
+			clearFieldError(usernameWrap, usernameHelp, usernameInput);
+			return true;
+		}
+
+		function validatePassword() {
+			const value = passwordInput.value;
+			if (value.length < 6) {
+				setFieldError(passwordWrap, passwordHelp, passwordInput, "Sandi minimal 6 karakter.");
+				return false;
+			}
+			clearFieldError(passwordWrap, passwordHelp, passwordInput);
+			return true;
+		}
+
+		function validateForm() {
+			setStatus("");
+			const validFullName = validateFullName();
+			const validUsername = validateUsername();
+			const validPassword = validatePassword();
+
+			if (!agreeInput.checked) {
+				setStatus("Centang Sudah Benar sebelum menyelesaikan pendaftaran.", "error");
+				return false;
+			}
+
+			return validFullName && validUsername && validPassword;
+		}
+
+		togglePasswordBtn.addEventListener("click", () => {
+			const isMasked = passwordInput.type === "password";
+			passwordInput.type = isMasked ? "text" : "password";
+			togglePasswordBtn.textContent = isMasked ? "Sembunyi" : "Lihat";
+			togglePasswordBtn.setAttribute("aria-label", isMasked ? "Sembunyikan sandi" : "Tampilkan sandi");
+		});
+
+		fullNameInput.addEventListener("input", () => {
+			if (fullNameInput.value.trim().length >= 4) {
+				clearFieldError(fullNameWrap, fullNameHelp, fullNameInput);
+			}
+		});
+
+		usernameInput.addEventListener("input", () => {
+			usernameInput.value = usernameInput.value.replace(/\s+/g, "");
+			if (usernameInput.value.trim().length >= 3) {
+				clearFieldError(usernameWrap, usernameHelp, usernameInput);
+			}
+		});
+
+		passwordInput.addEventListener("input", () => {
+			if (passwordInput.value.length >= 6) {
+				clearFieldError(passwordWrap, passwordHelp, passwordInput);
+			}
+		});
+
+		agreeInput.addEventListener("change", () => {
+			if (agreeInput.checked && status.classList.contains("error")) {
+				setStatus("");
+			}
+		});
+
+		form.addEventListener("submit", (event) => {
+			event.preventDefault();
+
+			if (!validateForm()) {
+				if (!status.textContent) {
+					setStatus("Periksa kembali data pendaftaran Anda.", "error");
+				}
+				return;
+			}
+
+			const username = usernameInput.value.trim();
+			const existingUsers = readRegisteredUsers();
+			const usernameExists = existingUsers.some(
+				(user) => user && typeof user.username === "string" && user.username.toLowerCase() === username.toLowerCase()
+			);
+			if (usernameExists) {
+				setFieldError(usernameWrap, usernameHelp, usernameInput, "Nama akun sudah digunakan.");
+				setStatus("Gunakan nama akun lain lalu coba lagi.", "error");
+				return;
+			}
+
+			existingUsers.push({
+				fullName: fullNameInput.value.trim(),
+				username,
+				password: passwordInput.value,
+				createdAt: new Date().toISOString()
+			});
+			localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(existingUsers));
+
+			localStorage.setItem("vizlyst.prefill.username", username);
+
+			submitBtn.disabled = true;
+			submitBtn.classList.add("loading");
+			setStatus("Membuat akun baru...", "info");
+
+			setTimeout(() => {
+				setStatus("Akun berhasil dibuat. Mengarahkan ke halaman masuk...", "success");
+				submitBtn.classList.remove("loading");
+				submitBtn.disabled = false;
+				window.location.href = getLoginLink();
+			}, 1200);
+		});
+	</script>
+</body>
+</html>
