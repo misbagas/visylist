@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>VizLyst - Hasil Prediksi</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #d8d8d8;
+			--ink: #121212;
+			--line: #121212;
+			--muted: #667080;
+			--panel: rgba(247, 247, 247, 0.74);
+			--card: rgba(239, 239, 239, 0.82);
+			--focus: #165aa6;
+			--success: #0f7a4d;
+			--error: #b3261e;
+			--shadow: 0 14px 30px rgba(0, 0, 0, 0.1);
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			margin: 0;
+			min-height: 100%;
+		}
+
+		body {
+			font-family: "Manrope", "Segoe UI", Tahoma, sans-serif;
+			color: var(--ink);
+			background:
+				radial-gradient(circle at 9% 14%, rgba(255, 255, 255, 0.64), transparent 42%),
+				radial-gradient(circle at 90% 84%, rgba(0, 0, 0, 0.08), transparent 34%),
+				linear-gradient(160deg, #dedede, var(--bg));
+			padding: 18px;
+		}
+
+		.page {
+			width: min(100%, 1120px);
+			margin: 0 auto;
+			padding: clamp(14px, 2vw, 22px);
+			border-radius: 18px;
+			background: var(--panel);
+			border: 1.2px solid rgba(0, 0, 0, 0.13);
+			box-shadow: var(--shadow);
+			backdrop-filter: blur(2px);
+			animation: rise 0.45s ease-out both;
+		}
+
+		.topbar {
+			display: grid;
+			grid-template-columns: 1fr auto 1fr;
+			align-items: center;
+			gap: 14px;
+		}
+
+		.brand {
+			display: inline-flex;
+			align-items: center;
+			gap: 12px;
+			justify-self: start;
+		}
+
+		.brand-mark {
+			width: 48px;
+			height: 40px;
+			border-radius: 10px;
+			background: #090909;
+			color: #ffffff;
+			display: grid;
+			place-items: center;
+			font-family: "Space Grotesk", "Manrope", sans-serif;
+			font-size: 31px;
+			font-weight: 700;
+			line-height: 1;
+			letter-spacing: -0.5px;
+		}
+
+		.brand-name {
+			margin: 0;
+			font-family: "Space Grotesk", "Manrope", sans-serif;
+			font-style: italic;
+			font-size: clamp(1.45rem, 2.2vw, 2rem);
+			font-weight: 700;
+			letter-spacing: -0.35px;
+		}
+
+		.title-wrap {
+			justify-self: center;
+			text-align: center;
+			width: min(100%, 390px);
+		}
+
+		.title {
+			margin: 0;
+			font-size: clamp(1.8rem, 3.1vw, 2.9rem);
+			line-height: 1.08;
+			font-weight: 800;
+			letter-spacing: -0.5px;
+		}
+
+		.title-line {
+			width: 100%;
+			height: 3px;
+			margin-top: 12px;
+			background: rgba(16, 16, 16, 0.9);
+			border-radius: 999px;
+		}
+
+		.profile {
+			justify-self: end;
+			display: inline-flex;
+			align-items: center;
+			gap: 9px;
+			font-size: clamp(1.35rem, 2.3vw, 2.2rem);
+			font-weight: 600;
+			letter-spacing: -0.35px;
+		}
+
+		.profile-icon {
+			width: 52px;
+			height: 52px;
+			flex-shrink: 0;
+		}
+
+		.profile-icon svg {
+			width: 100%;
+			height: 100%;
+			fill: none;
+			stroke: #111111;
+			stroke-width: 1.8;
+		}
+
+		.toolbar {
+			margin-top: 20px;
+			margin-bottom: 14px;
+		}
+
+		.back-btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 9px;
+			border: 2.5px solid var(--line);
+			border-radius: 14px;
+			background: #f2f2f2;
+			color: #101010;
+			text-decoration: none;
+			font-family: "Space Grotesk", "Manrope", sans-serif;
+			font-weight: 700;
+			font-size: clamp(1.4rem, 2.3vw, 2.2rem);
+			line-height: 1;
+			letter-spacing: -0.4px;
+			padding: 8px 16px 9px 10px;
+			transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+		}
+
+		.back-btn svg {
+			width: 42px;
+			height: 42px;
+			fill: none;
+			stroke: #111111;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke-width: 2.6;
+			flex-shrink: 0;
+		}
+
+		.back-btn:hover {
+			transform: translateY(-1px);
+			box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+			filter: brightness(1.01);
+		}
+
+		.predict-layout {
+			display: grid;
+			grid-template-columns: minmax(300px, 1.45fr) minmax(260px, 1fr);
+			gap: clamp(14px, 2vw, 22px);
+			align-items: stretch;
+		}
+
+		.left-col {
+			display: grid;
+			gap: clamp(12px, 2vh, 18px);
+		}
+
+		.metric-card,
+		.summary-card {
+			border: 3px solid var(--line);
+			border-radius: 16px;
+			background: var(--card);
+			opacity: 0;
+			animation: rise .45s ease-out forwards;
+		}
+
+		.metric-card:nth-child(1) {
+			animation-delay: .04s;
+		}
+
+		.metric-card:nth-child(2) {
+			animation-delay: .08s;
+		}
+
+		.metric-card:nth-child(3) {
+			animation-delay: .12s;
+		}
+
+		.summary-card {
+			animation-delay: .16s;
+		}
+
+		.metric-card {
+			min-height: 136px;
+			padding: 10px 12px 12px;
+		}
+
+		.card-title {
+			margin: 0;
+			text-align: center;
+			font-size: clamp(1.05rem, 1.65vw, 1.75rem);
+			font-weight: 800;
+			letter-spacing: -0.2px;
+		}
+
+		.metric-body {
+			margin-top: 10px;
+			display: grid;
+			grid-template-columns: 56px 1fr;
+			gap: 12px;
+			align-items: end;
+			min-height: 72px;
+		}
+
+		.metric-icon {
+			width: 56px;
+			height: 56px;
+			display: grid;
+			place-items: center;
+			align-self: end;
+		}
+
+		.metric-icon svg {
+			width: 52px;
+			height: 52px;
+			fill: none;
+			stroke: #141414;
+			stroke-width: 1.75;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+
+		.metric-lines {
+			display: grid;
+			gap: 4px;
+		}
+
+		.metric-line {
+			margin: 0;
+			font-size: clamp(0.9rem, 1.15vw, 1.02rem);
+			font-weight: 700;
+			color: #202124;
+			line-height: 1.3;
+		}
+
+		.metric-line strong {
+			font-weight: 800;
+		}
+
+		.metric-line.negative {
+			color: var(--error);
+		}
+
+		.metric-line.success {
+			color: var(--success);
+		}
+
+		.summary-card {
+			min-height: 468px;
+			padding: 10px 12px 12px;
+			display: grid;
+			grid-template-rows: auto 1fr auto;
+		}
+
+		.summary-content {
+			margin-top: 10px;
+			padding: 8px 4px;
+			overflow: auto;
+		}
+
+		.summary-content p {
+			margin: 0 0 10px;
+			font-size: 0.96rem;
+			line-height: 1.45;
+			font-weight: 600;
+			color: #252525;
+		}
+
+		.summary-content p:last-child {
+			margin-bottom: 0;
+		}
+
+		.summary-content .empty {
+			color: #4f5561;
+		}
+
+		.summary-content a {
+			color: #0f3d73;
+			font-weight: 700;
+			text-decoration-thickness: 1.4px;
+			text-underline-offset: 3px;
+		}
+
+		.summary-list {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: grid;
+			gap: 8px;
+		}
+
+		.summary-item {
+			padding: 8px 9px;
+			border-radius: 10px;
+			background: rgba(255, 255, 255, 0.52);
+			border: 1px dashed rgba(18, 18, 18, 0.25);
+			font-size: 0.92rem;
+			font-weight: 700;
+			line-height: 1.35;
+		}
+
+		.voice-row {
+			padding-top: 10px;
+			border-top: 1.8px solid rgba(18, 18, 18, 0.2);
+		}
+
+		.voice-btn {
+			width: 100%;
+			height: 48px;
+			border: 2px solid transparent;
+			border-radius: 12px;
+			background: rgba(255, 255, 255, 0.54);
+			display: inline-flex;
+			align-items: center;
+			gap: 9px;
+			padding: 0 10px;
+			font: inherit;
+			font-size: 1.08rem;
+			font-weight: 800;
+			color: var(--muted);
+			cursor: pointer;
+			transition: border-color .16s ease, background-color .16s ease, color .16s ease;
+		}
+
+		.voice-btn svg {
+			width: 34px;
+			height: 34px;
+			fill: none;
+			stroke: #1e1e1e;
+			stroke-width: 1.8;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			flex-shrink: 0;
+		}
+
+		.voice-btn:hover:not(:disabled) {
+			border-color: rgba(22, 90, 166, 0.42);
+			background: rgba(255, 255, 255, 0.88);
+			color: #1a1a1a;
+		}
+
+		.voice-btn.playing {
+			border-color: rgba(15, 122, 77, 0.45);
+			color: #106946;
+		}
+
+		.voice-btn:disabled {
+			opacity: 0.66;
+			cursor: not-allowed;
+		}
+
+		.status {
+			margin: 12px 2px 0;
+			min-height: 22px;
+			font-size: 0.93rem;
+			font-weight: 700;
+			color: #303030;
+		}
+
+		.status.success {
+			color: var(--success);
+		}
+
+		.status.error {
+			color: var(--error);
+		}
+
+		.status.info {
+			color: #1f2937;
+		}
+
+		.back-btn:focus-visible,
+		.voice-btn:focus-visible,
+		a:focus-visible {
+			outline: 3px solid rgba(22, 90, 166, 0.28);
+			outline-offset: 2px;
+		}
+
+		@media (max-width: 1030px) {
+			.title-wrap {
+				width: min(100%, 330px);
+			}
+
+			.profile {
+				font-size: clamp(1.15rem, 2.2vw, 1.65rem);
+			}
+
+			.profile-icon {
+				width: 46px;
+				height: 46px;
+			}
+
+			.metric-card {
+				min-height: 130px;
+			}
+
+			.summary-card {
+				min-height: 436px;
+			}
+		}
+
+		@media (max-width: 900px) {
+			.topbar {
+				grid-template-columns: 1fr;
+				justify-items: start;
+				gap: 10px;
+			}
+
+			.title-wrap {
+				order: 2;
+				justify-self: stretch;
+				text-align: left;
+				width: min(100%, 460px);
+			}
+
+			.title-line {
+				width: min(100%, 420px);
+			}
+
+			.profile {
+				justify-self: start;
+				order: 3;
+			}
+
+			.predict-layout {
+				grid-template-columns: 1fr;
+			}
+
+			.summary-card {
+				min-height: 318px;
+			}
+		}
+
+		@media (max-width: 560px) {
+			body {
+				padding: 12px;
+			}
+
+			.page {
+				padding: 12px;
+				border-radius: 14px;
+			}
+
+			.brand-mark {
+				width: 40px;
+				height: 34px;
+				border-radius: 8px;
+				font-size: 25px;
+			}
+
+			.brand-name {
+				font-size: 1.4rem;
+			}
+
+			.title {
+				font-size: 1.68rem;
+			}
+
+			.toolbar {
+				margin-top: 14px;
+				margin-bottom: 12px;
+			}
+
+			.back-btn {
+				width: 100%;
+				justify-content: center;
+				font-size: 1.35rem;
+				padding: 8px 10px;
+			}
+
+			.back-btn svg {
+				width: 36px;
+				height: 36px;
+			}
+
+			.card-title {
+				font-size: 1.16rem;
+			}
+
+			.metric-body {
+				grid-template-columns: 50px 1fr;
+				gap: 10px;
+				min-height: 68px;
+			}
+
+			.metric-icon {
+				width: 50px;
+				height: 50px;
+			}
+
+			.metric-icon svg {
+				width: 46px;
+				height: 46px;
+			}
+
+			.metric-line {
+				font-size: 0.88rem;
+			}
+
+			.summary-card {
+				min-height: 280px;
+			}
+
+			.voice-btn {
+				font-size: 1rem;
+				height: 46px;
+			}
+
+			.voice-btn svg {
+				width: 30px;
+				height: 30px;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			*,
+			*::before,
+			*::after {
+				animation-duration: 0.01ms !important;
+				animation-iteration-count: 1 !important;
+				transition-duration: 0.01ms !important;
+				scroll-behavior: auto !important;
+			}
+		}
+
+		@keyframes rise {
+			from {
+				opacity: 0;
+				transform: translateY(10px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="page">
+		<header class="topbar">
+			<div class="brand">
+				<div class="brand-mark" aria-hidden="true">VL</div>
+				<p class="brand-name">VizLyst</p>
+			</div>
+
+			<div class="title-wrap">
+				<h1 class="title">Hasil Prediksi</h1>
+				<div class="title-line" aria-hidden="true"></div>
+			</div>
+
+			<div class="profile" aria-label="Profil pengguna">
+				<span class="profile-icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24" focusable="false">
+						<circle cx="12" cy="12" r="9"></circle>
+						<circle cx="12" cy="9" r="3"></circle>
+						<path d="M6.7 18.2a6 6 0 0 1 10.6 0"></path>
+					</svg>
+				</span>
+				<span id="profileName">Raysa S</span>
+			</div>
+		</header>
+
+		<div class="toolbar">
+			<a class="back-btn" href="beranda.html" id="backBtn">
+				<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+					<path d="M20 12H4"></path>
+					<path d="M11 5L4 12l7 7"></path>
+				</svg>
+				Kembali
+			</a>
+		</div>
+
+		<section class="predict-layout" aria-label="Ringkasan hasil prediksi penjualan">
+			<div class="left-col">
+				<article class="metric-card" aria-labelledby="avgTitle">
+					<h2 class="card-title" id="avgTitle">Rata-Rata Penjualan :</h2>
+					<div class="metric-body">
+						<div class="metric-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false">
+								<circle cx="18.5" cy="5" r="2.8"></circle>
+								<path d="M16.2 5h-2.7"></path>
+								<path d="M8.2 4.5h5.1l-.8 3.4H9"></path>
+								<path d="M3 4.5h1.8l1.7 11.2h9.8"></path>
+								<path d="M7.4 9.5h8.5"></path>
+								<path d="M6.9 7h8.9"></path>
+								<circle cx="9" cy="19" r="1.5"></circle>
+								<circle cx="16" cy="19" r="1.5"></circle>
+								<path d="M2.8 6.9 7.9 2l3.1 3.2"></path>
+								<path d="m4.5 5.2 1.2 1.2"></path>
+							</svg>
+						</div>
+						<div class="metric-lines">
+							<p class="metric-line" id="avgLine1">0 item per catatan</p>
+							<p class="metric-line" id="avgLine2">Rata-rata omzet Rp 0</p>
+							<p class="metric-line" id="avgLine3">Rata-rata bersih Rp 0</p>
+						</div>
+					</div>
+				</article>
+
+				<article class="metric-card" aria-labelledby="nextTitle">
+					<h2 class="card-title" id="nextTitle">Prediksi Besok :</h2>
+					<div class="metric-body">
+						<div class="metric-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false">
+								<rect x="3" y="4" width="18" height="16" rx="2"></rect>
+								<path d="M8 2.8v3.5M16 2.8v3.5M3 9h18"></path>
+								<path d="M10.5 15h3"></path>
+								<path d="M12 13.5v3"></path>
+							</svg>
+						</div>
+						<div class="metric-lines">
+							<p class="metric-line" id="predLine1">Besok diperkirakan 0 item</p>
+							<p class="metric-line" id="predLine2">Omzet prediksi Rp 0</p>
+							<p class="metric-line" id="predLine3">Untuk tanggal -</p>
+						</div>
+					</div>
+				</article>
+
+				<article class="metric-card" aria-labelledby="stockTitle">
+					<h2 class="card-title" id="stockTitle">Rekomendasi Stok :</h2>
+					<div class="metric-body">
+						<div class="metric-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false">
+								<rect x="3" y="14" width="5" height="6"></rect>
+								<rect x="9.5" y="14" width="5" height="6"></rect>
+								<rect x="16" y="14" width="5" height="6"></rect>
+								<rect x="6.5" y="8" width="11" height="6"></rect>
+								<path d="M8 3h8v5H8z"></path>
+								<path d="M10.2 5.1h3.6M10.2 7.1h3.6"></path>
+							</svg>
+						</div>
+						<div class="metric-lines">
+							<p class="metric-line" id="stockLine1">Saran stok awal 0 item</p>
+							<p class="metric-line" id="stockLine2">Safety stock 0 item</p>
+							<p class="metric-line" id="stockLine3">Prioritas stok: -</p>
+						</div>
+					</div>
+				</article>
+			</div>
+
+			<article class="summary-card" aria-labelledby="summaryTitle">
+				<h2 class="card-title" id="summaryTitle">Ringkasan Prediksi :</h2>
+				<div class="summary-content" id="summaryContent">
+					<p class="empty">Belum ada data prediksi. Isi data penjualan dulu di <a href="catat.html">halaman catat</a>.</p>
+				</div>
+				<div class="voice-row">
+					<button class="voice-btn" type="button" id="voiceBtn" disabled>
+						<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+							<path d="M4.5 9h3.6l5-4.2v14.4l-5-4.2H4.5z"></path>
+							<path d="M16 9.2c1.5 1 1.5 4.6 0 5.6"></path>
+							<path d="M18.4 7.4c2.8 2 2.8 7.2 0 9.2"></path>
+						</svg>
+						<span id="voiceLabel">Putar suara...</span>
+					</button>
+				</div>
+			</article>
+		</section>
+
+		<p class="status" id="status" aria-live="polite"></p>
+	</main>
+
+	<script>
+		const AUTH_SESSION_KEY = "vizlyst.auth.session";
+		const RECORDS_KEY = "vizlyst.sales.records";
+		const PREDICTION_CHART_KEY = "vizlyst.prediction.chart";
+		const avgLine1 = document.getElementById("avgLine1");
+		const avgLine2 = document.getElementById("avgLine2");
+		const avgLine3 = document.getElementById("avgLine3");
+		const predLine1 = document.getElementById("predLine1");
+		const predLine2 = document.getElementById("predLine2");
+		const predLine3 = document.getElementById("predLine3");
+		const stockLine1 = document.getElementById("stockLine1");
+		const stockLine2 = document.getElementById("stockLine2");
+		const stockLine3 = document.getElementById("stockLine3");
+		const summaryContent = document.getElementById("summaryContent");
+		const voiceBtn = document.getElementById("voiceBtn");
+		const voiceLabel = document.getElementById("voiceLabel");
+		const statusEl = document.getElementById("status");
+		const profileNameEl = document.getElementById("profileName");
+
+		function readAuthSession() {
+			const parseSession = (raw) => {
+				if (!raw) {
+					return null;
+				}
+
+				try {
+					const parsed = JSON.parse(raw);
+					if (parsed && typeof parsed.username === "string" && parsed.username.trim()) {
+						return parsed;
+					}
+					return null;
+				} catch (error) {
+					return null;
+				}
+			};
+
+			const fromSession = parseSession(sessionStorage.getItem(AUTH_SESSION_KEY));
+			if (fromSession) {
+				return fromSession;
+			}
+
+			const fromPersistent = parseSession(localStorage.getItem(AUTH_SESSION_KEY));
+			if (fromPersistent) {
+				sessionStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(fromPersistent));
+				return fromPersistent;
+			}
+
+			return null;
+		}
+
+		function requireAuth() {
+			const activeSession = readAuthSession();
+			if (!activeSession) {
+				window.location.replace("login.html?next=prediksi.html");
+				return null;
+			}
+			return activeSession;
+		}
+
+		const authSession = requireAuth();
+
+		let speechText = "";
+		let speechInstance = null;
+
+		function formatNumber(value) {
+			return new Intl.NumberFormat("id-ID").format(Math.round(value));
+		}
+
+		function formatCurrency(value) {
+			return "Rp " + formatNumber(value);
+		}
+
+		function formatDecimal(value) {
+			return new Intl.NumberFormat("id-ID", {
+				minimumFractionDigits: 1,
+				maximumFractionDigits: 1
+			}).format(value);
+		}
+
+		function setStatus(message, type) {
+			statusEl.textContent = message;
+			statusEl.className = "status";
+			if (type) {
+				statusEl.classList.add(type);
+			}
+		}
+
+		function parseRecords() {
+			const raw = localStorage.getItem(RECORDS_KEY);
+			if (!raw) {
+				return [];
+			}
+
+			try {
+				const rows = JSON.parse(raw);
+				if (!Array.isArray(rows)) {
+					return [];
+				}
+
+				return rows
+					.map((item) => {
+						const quantity = Number(item.quantity) || 0;
+						const unitPrice = Number(item.unitPrice) || 0;
+						const gross = Number(item.gross) || quantity * unitPrice;
+						const expense = Number(item.expense) || 0;
+						const net = Number(item.net) || gross - expense;
+						const orderDate = item.saleDate || item.createdAt || new Date().toISOString();
+
+						return {
+							quantity,
+							unitPrice,
+							gross,
+							expense,
+							net,
+							orderDate
+						};
+					})
+					.filter((item) => item.quantity > 0 && item.gross >= 0)
+					.sort((a, b) => new Date(a.orderDate) - new Date(b.orderDate));
+			} catch (error) {
+				return [];
+			}
+		}
+
+		function tomorrowLabel() {
+			const d = new Date();
+			d.setDate(d.getDate() + 1);
+			return new Intl.DateTimeFormat("id-ID", {
+				weekday: "long",
+				day: "2-digit",
+				month: "short"
+			}).format(d);
+		}
+
+		function shortDateLabel(value) {
+			const parsed = new Date(value);
+			if (Number.isNaN(parsed.getTime())) {
+				return "-";
+			}
+
+			return new Intl.DateTimeFormat("id-ID", {
+				day: "2-digit",
+				month: "short"
+			}).format(parsed);
+		}
+
+		function clearPredictionSnapshot() {
+			localStorage.removeItem(PREDICTION_CHART_KEY);
+		}
+
+		function savePredictionSnapshot(records, model) {
+			const recent = records.slice(-7);
+			const snapshot = {
+				labels: recent.map((item) => shortDateLabel(item.orderDate)),
+				quantities: recent.map((item) => Math.max(0, Math.round(item.quantity))),
+				predictedQty: Math.max(0, Math.round(model.predictedQty)),
+				updatedAt: new Date().toISOString()
+			};
+
+			localStorage.setItem(PREDICTION_CHART_KEY, JSON.stringify(snapshot));
+		}
+
+		function fillProfileName() {
+			if (authSession && authSession.fullName) {
+				profileNameEl.textContent = authSession.fullName;
+				return;
+			}
+
+			if (authSession && authSession.username) {
+				profileNameEl.textContent = authSession.username;
+				return;
+			}
+
+			const remembered =
+				localStorage.getItem("vizlyst.remember.username") ||
+				localStorage.getItem("vizlyst.prefill.username");
+			profileNameEl.textContent = remembered || "Raysa S";
+		}
+
+		function computePrediction(records) {
+			const count = records.length;
+			const totals = records.reduce(
+				(acc, item) => {
+					acc.qty += item.quantity;
+					acc.gross += item.gross;
+					acc.net += item.net;
+					acc.expense += item.expense;
+					acc.unitPrice += item.unitPrice;
+					return acc;
+				},
+				{ qty: 0, gross: 0, net: 0, expense: 0, unitPrice: 0 }
+			);
+
+			const avgQty = totals.qty / count;
+			const avgGross = totals.gross / count;
+			const avgNet = totals.net / count;
+			const avgExpense = totals.expense / count;
+			const avgUnitPrice = totals.unitPrice / count || (totals.gross / Math.max(totals.qty, 1));
+
+			const recent = records.slice(-Math.min(7, count));
+			let weightSum = 0;
+			let weightedQty = 0;
+			let weightedGross = 0;
+
+			recent.forEach((item, index) => {
+				const weight = index + 1;
+				weightSum += weight;
+				weightedQty += item.quantity * weight;
+				weightedGross += item.gross * weight;
+			});
+
+			let trendQty = 0;
+			if (recent.length >= 2) {
+				trendQty = recent[recent.length - 1].quantity - recent[recent.length - 2].quantity;
+			}
+
+			const predictedQtyBase = weightedQty / Math.max(weightSum, 1);
+			const predictedQty = Math.max(1, Math.round(predictedQtyBase + trendQty * 0.35));
+			const predictedGrossBase = weightedGross / Math.max(weightSum, 1);
+			const predictedGross = Math.max(
+				Math.round(predictedGrossBase),
+				Math.round(predictedQty * Math.max(avgUnitPrice, 1))
+			);
+			const predictedExpense = Math.round(avgExpense);
+			const predictedNet = predictedGross - predictedExpense;
+
+			const safetyStock = Math.max(2, Math.ceil(predictedQty * 0.25));
+			const suggestedStock = predictedQty + safetyStock;
+
+			const trendLabel = trendQty > 1 ? "naik" : trendQty < -1 ? "turun" : "stabil";
+			const priority = suggestedStock >= 25 ? "tinggi" : suggestedStock >= 12 ? "sedang" : "normal";
+			const confidence = count >= 12 ? "tinggi" : count >= 6 ? "sedang" : "awal";
+
+			return {
+				count,
+				avgQty,
+				avgGross,
+				avgNet,
+				predictedQty,
+				predictedGross,
+				predictedNet,
+				suggestedStock,
+				safetyStock,
+				trendLabel,
+				priority,
+				confidence,
+				tomorrow: tomorrowLabel()
+			};
+		}
+
+		function renderNoData() {
+			avgLine1.textContent = "Belum ada data penjualan";
+			avgLine2.textContent = "Rata-rata omzet Rp 0";
+			avgLine3.textContent = "Rata-rata bersih Rp 0";
+
+			predLine1.textContent = "Prediksi belum tersedia";
+			predLine2.textContent = "Tambahkan data di halaman catat";
+			predLine3.textContent = "Untuk tanggal " + tomorrowLabel();
+
+			stockLine1.textContent = "Saran stok awal 0 item";
+			stockLine2.textContent = "Safety stock 0 item";
+			stockLine3.textContent = "Prioritas stok: -";
+
+			summaryContent.innerHTML =
+				'<p class="empty">Belum ada data prediksi. Isi data penjualan dulu di <a href="catat.html">halaman catat</a> agar sistem bisa menghitung hasil yang relevan.</p>';
+
+			voiceBtn.disabled = true;
+			voiceBtn.classList.remove("playing");
+			voiceLabel.textContent = "Putar suara...";
+			speechText = "";
+			clearPredictionSnapshot();
+			setStatus("Belum ada data penjualan untuk dianalisis.", "info");
+		}
+
+		function renderData(model, records) {
+			avgLine1.textContent = formatDecimal(model.avgQty) + " item per catatan";
+			avgLine2.textContent = "Rata-rata omzet " + formatCurrency(model.avgGross);
+			avgLine3.textContent = "Rata-rata bersih " + formatCurrency(model.avgNet);
+
+			predLine1.textContent = "Besok diperkirakan " + formatNumber(model.predictedQty) + " item";
+			predLine2.textContent = "Omzet prediksi " + formatCurrency(model.predictedGross);
+			predLine3.textContent = "Untuk " + model.tomorrow;
+
+			stockLine1.textContent = "Saran stok awal " + formatNumber(model.suggestedStock) + " item";
+			stockLine2.textContent = "Safety stock " + formatNumber(model.safetyStock) + " item";
+			stockLine3.textContent = "Prioritas stok: " + model.priority;
+
+			const summaryItems = [
+				"Analisis diambil dari " + formatNumber(model.count) + " catatan penjualan terakhir.",
+				"Tren permintaan saat ini " + model.trendLabel + " dengan tingkat keyakinan " + model.confidence + ".",
+				"Prediksi laba bersih besok sekitar " + formatCurrency(model.predictedNet) + ".",
+				"Disarankan menyiapkan minimal " + formatNumber(model.suggestedStock) + " item agar stok aman."
+			];
+
+			summaryContent.innerHTML =
+				"<ul class=\"summary-list\">" +
+				summaryItems.map((text) => "<li class=\"summary-item\">" + text + "</li>").join("") +
+				"</ul>";
+
+			speechText =
+				"Ringkasan prediksi VizLyst. " +
+				summaryItems.join(" ");
+
+			voiceBtn.disabled = false;
+			voiceBtn.classList.remove("playing");
+			voiceLabel.textContent = "Putar suara...";
+
+			savePredictionSnapshot(records, model);
+
+			setStatus("Prediksi berhasil diperbarui dari data penjualan terbaru.", "success");
+		}
+
+		function stopVoice() {
+			if (window.speechSynthesis) {
+				window.speechSynthesis.cancel();
+			}
+			voiceBtn.classList.remove("playing");
+			voiceLabel.textContent = "Putar suara...";
+			speechInstance = null;
+		}
+
+		voiceBtn.addEventListener("click", () => {
+			if (!speechText) {
+				return;
+			}
+
+			if (!("speechSynthesis" in window)) {
+				setStatus("Browser ini belum mendukung fitur suara.", "error");
+				return;
+			}
+
+			if (window.speechSynthesis.speaking) {
+				stopVoice();
+				setStatus("Suara dihentikan.", "info");
+				return;
+			}
+
+			speechInstance = new SpeechSynthesisUtterance(speechText);
+			speechInstance.lang = "id-ID";
+			speechInstance.rate = 1;
+			speechInstance.pitch = 1;
+
+			speechInstance.onstart = () => {
+				voiceBtn.classList.add("playing");
+				voiceLabel.textContent = "Hentikan suara";
+				setStatus("Membacakan ringkasan prediksi...", "info");
+			};
+
+			speechInstance.onend = () => {
+				voiceBtn.classList.remove("playing");
+				voiceLabel.textContent = "Putar suara...";
+				setStatus("Ringkasan suara selesai diputar.", "success");
+			};
+
+			speechInstance.onerror = () => {
+				voiceBtn.classList.remove("playing");
+				voiceLabel.textContent = "Putar suara...";
+				setStatus("Terjadi kendala saat memutar suara.", "error");
+			};
+
+			window.speechSynthesis.cancel();
+			window.speechSynthesis.speak(speechInstance);
+		});
+
+		window.addEventListener("beforeunload", () => {
+			stopVoice();
+		});
+
+		function init() {
+			fillProfileName();
+			const records = parseRecords();
+
+			if (!records.length) {
+				renderNoData();
+				return;
+			}
+
+			const model = computePrediction(records);
+			renderData(model, records);
+		}
+
+		init();
+	</script>
+</body>
+</html>
