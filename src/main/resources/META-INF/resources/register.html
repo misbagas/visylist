@@ -9,15 +9,15 @@
 	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 	<style>
 		:root {
-			--bg: #d9d9d9;
-			--panel: rgba(246, 246, 246, 0.92);
-			--ink: #161616;
-			--line: #1f1f1f;
-			--input-bg: #fefefe;
-			--focus: #165aa6;
+			--bg: #ffffff;
+			--panel: #efefef;
+			--ink: #111111;
+			--line: #111111;
+			--input-bg: #f8f8f8;
+			--focus: #111111;
 			--success: #0f7a4e;
 			--error: #b31f1f;
-			--shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+			--shadow: none;
 		}
 
 		* {
@@ -33,23 +33,30 @@
 		body {
 			font-family: "Manrope", "Segoe UI", Tahoma, sans-serif;
 			color: var(--ink);
-			background:
-				radial-gradient(circle at 14% 12%, rgba(255, 255, 255, 0.72), transparent 40%),
-				radial-gradient(circle at 92% 88%, rgba(0, 0, 0, 0.08), transparent 34%),
-				linear-gradient(160deg, #dedede, var(--bg));
+			background: var(--bg);
 			display: grid;
 			place-items: center;
-			padding: 22px;
+			padding: 16px;
+		}
+
+		.page-label {
+			position: fixed;
+			top: 34px;
+			left: 50%;
+			transform: translateX(-50%);
+			font-size: 1rem;
+			font-weight: 400;
+			letter-spacing: 0;
+			color: #c9c9c9;
 		}
 
 		.register-shell {
-			width: min(100%, 780px);
+			width: min(100%, 280px);
 			background: var(--panel);
-			border: 1.5px solid rgba(0, 0, 0, 0.12);
-			border-radius: 16px;
+			border: 0;
+			border-radius: 0;
 			box-shadow: var(--shadow);
-			padding: clamp(20px, 3vw, 30px);
-			backdrop-filter: blur(2px);
+			padding: 12px 12px 18px;
 			animation: rise .55s ease-out both;
 		}
 
@@ -57,13 +64,13 @@
 			display: flex;
 			align-items: center;
 			gap: 10px;
-			margin-bottom: 16px;
+			margin-bottom: 12px;
 		}
 
 		.brand-mark {
 			width: 34px;
 			height: 34px;
-			border-radius: 7px;
+			border-radius: 4px;
 			background: #0b0b0b;
 			color: #ffffff;
 			display: grid;
@@ -78,26 +85,26 @@
 			margin: 0;
 			font-family: "Space Grotesk", "Manrope", sans-serif;
 			font-style: italic;
-			font-size: clamp(1.2rem, 2.3vw, 1.5rem);
+			font-size: 1.1rem;
 			font-weight: 700;
 		}
 
 		.title {
-			margin: 10px 0 24px;
+			margin: 14px 0 20px;
 			text-align: center;
-			font-size: clamp(1.35rem, 2.8vw, 2rem);
+			font-size: 1.1rem;
+			font-weight: 800;
 			line-height: 1.2;
 		}
 
 		.form {
 			display: grid;
-			gap: 14px;
+			gap: 16px;
 		}
 
 		.field {
 			display: grid;
-			grid-template-columns: minmax(160px, 240px) 1fr;
-			column-gap: 16px;
+			grid-template-columns: 1fr;
 			row-gap: 8px;
 			align-items: center;
 			opacity: 0;
@@ -119,46 +126,45 @@
 		.field-label {
 			display: inline-flex;
 			align-items: center;
-			gap: 10px;
-			font-size: clamp(1.06rem, 2.2vw, 1.55rem);
+			gap: 6px;
+			font-size: 1rem;
 			font-weight: 700;
 			line-height: 1;
 		}
 
 		.field-icon {
-			width: 42px;
-			height: 42px;
+			width: 28px;
+			height: 28px;
 			display: grid;
 			place-items: center;
 			flex-shrink: 0;
 		}
 
 		.field-icon svg {
-			width: 35px;
-			height: 35px;
+			width: 26px;
+			height: 26px;
 			fill: #000000;
 		}
 
 		.input-wrap {
-			grid-column: 2;
 			position: relative;
 		}
 
 		.text-input {
 			width: 100%;
-			height: 56px;
+			height: 38px;
 			border: 2px solid var(--line);
-			border-radius: 10px;
+			border-radius: 8px;
 			background: var(--input-bg);
 			font: inherit;
-			font-size: 1.02rem;
+			font-size: 0.95rem;
 			color: var(--ink);
-			padding: 0 14px;
+			padding: 0 12px;
 			transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
 		}
 
 		.text-input.password {
-			padding-right: 88px;
+			padding-right: 66px;
 		}
 
 		.text-input::placeholder {
@@ -179,29 +185,28 @@
 		.toggle-pass {
 			position: absolute;
 			top: 50%;
-			right: 10px;
+			right: 8px;
 			transform: translateY(-50%);
 			border: 0;
 			background: transparent;
 			font: inherit;
-			font-size: 0.82rem;
+			font-size: 0.78rem;
 			font-weight: 800;
 			color: #2e2e2e;
 			cursor: pointer;
-			padding: 5px 6px;
-			border-radius: 8px;
+			padding: 4px 5px;
+			border-radius: 6px;
 		}
 
 		.field-help {
-			grid-column: 2;
 			margin: 0;
 			min-height: 17px;
-			font-size: 0.84rem;
+			font-size: 0.76rem;
 			color: var(--error);
 		}
 
 		.form-footer {
-			margin-top: 6px;
+			margin-top: 8px;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -209,17 +214,17 @@
 		}
 
 		.submit {
-			width: clamp(170px, 42%, 250px);
-			height: 52px;
+			width: 168px;
+			height: 34px;
 			border: 2px solid var(--line);
-			border-radius: 10px;
-			background: linear-gradient(180deg, #f1f1f1, #d8d8d8);
+			border-radius: 8px;
+			background: #f1f1f1;
 			color: #121212;
 			font-family: "Space Grotesk", "Manrope", sans-serif;
 			font-style: italic;
-			font-size: clamp(1.45rem, 3.4vw, 2rem);
+			font-size: 1.05rem;
 			font-weight: 700;
-			letter-spacing: -0.4px;
+			letter-spacing: -0.2px;
 			cursor: pointer;
 			transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
 		}
@@ -260,16 +265,16 @@
 			align-items: center;
 			gap: 10px;
 			cursor: pointer;
-			font-size: 1.05rem;
+			font-size: 0.95rem;
 			margin-left: auto;
 		}
 
 		.agree input {
 			appearance: none;
-			width: 25px;
-			height: 25px;
+			width: 26px;
+			height: 26px;
 			border: 2px solid #d2d2d2;
-			border-radius: 3px;
+			border-radius: 0;
 			background: #ececec;
 			margin: 0;
 			display: grid;
@@ -317,9 +322,9 @@
 		}
 
 		.signin {
-			margin: 14px 0 0;
+			margin: 12px 0 0;
 			text-align: right;
-			font-size: 0.96rem;
+			font-size: 0.86rem;
 		}
 
 		.signin a {
@@ -358,43 +363,43 @@
 		}
 
 		@media (max-width: 760px) {
+			.page-label {
+				top: 28px;
+				font-size: 0.95rem;
+			}
+
 			.register-shell {
-				padding: 18px;
-				border-radius: 14px;
+				width: min(100%, 280px);
+				padding: 12px 10px 16px;
 			}
 
 			.title {
-				margin-top: 4px;
-				margin-bottom: 18px;
+				margin-top: 8px;
+				margin-bottom: 16px;
 			}
 
 			.field {
 				grid-template-columns: 1fr;
-				row-gap: 7px;
+				row-gap: 8px;
 			}
 
 			.field-label,
 			.input-wrap,
 			.field-help {
-				grid-column: 1;
-			}
-
-			.field-label {
-				font-size: 1.07rem;
 			}
 
 			.field-icon {
-				width: 38px;
-				height: 38px;
+				width: 26px;
+				height: 26px;
 			}
 
 			.field-icon svg {
-				width: 31px;
-				height: 31px;
+				width: 24px;
+				height: 24px;
 			}
 
 			.text-input {
-				height: 52px;
+				height: 38px;
 			}
 
 			.form-footer {
@@ -405,13 +410,13 @@
 
 			.submit {
 				width: 100%;
-				height: 50px;
-				font-size: 1.58rem;
+				height: 34px;
+				font-size: 1.05rem;
 			}
 
 			.agree {
 				margin-left: 0;
-				align-self: flex-start;
+				align-self: center;
 			}
 
 			.signin {
@@ -421,21 +426,21 @@
 
 		@media (max-width: 430px) {
 			body {
-				padding: 14px;
+				padding: 12px;
 			}
 
 			.title {
-				font-size: 1.24rem;
+				font-size: 1.05rem;
 			}
 
 			.text-input {
-				height: 48px;
-				font-size: 0.98rem;
+				height: 36px;
+				font-size: 0.93rem;
 			}
 
 			.submit {
-				height: 48px;
-				font-size: 1.45rem;
+				height: 34px;
+				font-size: 1.02rem;
 			}
 		}
 
@@ -452,6 +457,7 @@
 	</style>
 </head>
 <body>
+	<p class="page-label">REGISTER</p>
 	<main class="register-shell" aria-labelledby="title-register">
 		<header class="brand">
 			<div class="brand-mark" aria-hidden="true">VL</div>
